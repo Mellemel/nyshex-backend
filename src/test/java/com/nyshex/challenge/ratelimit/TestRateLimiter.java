@@ -45,7 +45,7 @@ public class TestRateLimiter {
      */
     @Test
     public void testRateLimiter() {
-        final Clock clock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
+        final Clock clock = Clock.systemDefaultZone();
         final RateLimiter rateLimiter = new RateLimiter(clock, 2, 1000);
         assertTrue(rateLimiter.tryConsume("127.0.0.1"));
         assertTrue(rateLimiter.tryConsume("127.0.0.1"));
@@ -62,5 +62,19 @@ public class TestRateLimiter {
     }
 
     // TODO add more tests
-
+    /**
+     * Testing max tokens. Max tokens being 5.
+     */
+    @Test
+    public void testMaxTokens() {
+        final Clock clock = Clock.systemDefaultZone();
+        final RateLimiter rateLimiter = new RateLimiter(clock, 5, 1000);
+        rateLimiter.addSeconds(5);
+        assertTrue(rateLimiter.tryConsume("127.0.0.1"));
+        assertTrue(rateLimiter.tryConsume("127.0.0.1"));
+        assertTrue(rateLimiter.tryConsume("127.0.0.1"));
+        assertTrue(rateLimiter.tryConsume("127.0.0.1"));
+        assertTrue(rateLimiter.tryConsume("127.0.0.1"));
+        assertFalse(rateLimiter.tryConsume("127.0.0.1"));
+    }
 }
