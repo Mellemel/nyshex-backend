@@ -27,9 +27,9 @@ public class TestRateLimiter {
         assertFalse(rateLimiter.tryConsume("127.0.0.1"));
     }
 
-    /**
-     * Test RateLimiter with fixed time two keys
-     */
+    // /**
+    //  * Test RateLimiter with fixed time two keys
+    //  */
     @Test
     public void testTwoKeys() {
         final Clock clock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
@@ -45,15 +45,17 @@ public class TestRateLimiter {
      */
     @Test
     public void testRateLimiter() {
-        final Clock clock = null; // TODO create test clock
+        final Clock clock = Clock.fixed(Instant.now(), ZoneId.systemDefault());
         final RateLimiter rateLimiter = new RateLimiter(clock, 2, 1000);
         assertTrue(rateLimiter.tryConsume("127.0.0.1"));
         assertTrue(rateLimiter.tryConsume("127.0.0.1"));
         assertFalse(rateLimiter.tryConsume("127.0.0.1"));
         // TODO add 1 second to the clock
+        rateLimiter.addSeconds(1);
         assertTrue(rateLimiter.tryConsume("127.0.0.1"));
         assertFalse(rateLimiter.tryConsume("127.0.0.1"));
         // TODO add 2 seconds to the clock
+        rateLimiter.addSeconds(2);
         assertTrue(rateLimiter.tryConsume("127.0.0.1"));
         assertTrue(rateLimiter.tryConsume("127.0.0.1"));
         assertFalse(rateLimiter.tryConsume("127.0.0.1"));
