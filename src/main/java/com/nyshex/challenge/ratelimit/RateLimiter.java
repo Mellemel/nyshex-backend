@@ -23,17 +23,17 @@ import java.util.concurrent.ConcurrentHashMap;
  * read and write to the data structure simultaneously. 
  * <p>
  * TODO Runtime & Memory Complexity
- * Runtime complexity is O(n) because of the public method add tokens I added below.
+ * Runtime complexity is O(n) because of the public method addTokens below.
  * Memory complexity is O(n) due to the number of keys that are present in the hashtable.aver
  * <p>
  * TODO Security Implications
- * if tryConsume can be called with input from a malicious actor, then he can potentially drain
- *  the burst tokens for every ip available and render the service useless and he / she would be
+ * If tryConsume can be called with input from a malicious actor, then he / she can potentially drain
+ * the burst tokens for every ip available and render the service useless. He / she would be
  * able to shut down your system through utilizing every bit of memory available by introducing non Ip
  * keys. To mitigate this we can clean the input and make sure only valid ip are able to be stored.
- * In terms of knowing wether the request from a certain ip is legit, we would need to check headers
+ * In terms of knowing wether the request came from a legit ip, we would need to check headers
  * from our web servers and prevent malicious web requests from making it to the app servers.
- * I suggest you 
+ *
  */
 public class RateLimiter {
 
@@ -107,7 +107,7 @@ public class RateLimiter {
      * TODO Runtime & Memory Complexity
      *  Runtime complexity for this method is O(1) because since we are using
      *  a HashTable as our data strcuture, both read and write times are constant
-     *  time. Every line in method is takes constant time. Memory Complexity is O(n) because the amount of data that is being held
+     *  time. Every line in this method is takes constant time. Memory Complexity is O(n) because the amount of data that is being held
      *  in memory only grows depending on the amount of unique keys. Keys that visit multiple
      *  times won't create more data, just change them.
      * <p>
@@ -140,8 +140,8 @@ public class RateLimiter {
             map.put("lastAccess", clock.millis());
             bucket.put(key, map);
         } else {
-            // I assigned the initial totaltokens ammount to the burst amount because
-            // the second unit would not pass.
+            // I assigned the initial totaltokens amount to the burst amount because
+            // the second unit test would not pass.
             map.put("totalTokens", this.burst - 1);
             map.put("burstTokens", (long) this.burst - 1);
             map.put("lastAccess", clock.millis());
